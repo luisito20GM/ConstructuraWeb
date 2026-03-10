@@ -1,0 +1,173 @@
+/* =========================================
+   1. CONFIGURACIÓN GENERAL
+   ========================================= */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #434153;
+}
+
+h2 {
+    font-weight: 700;
+    color: #333;
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: #ffc107;
+    margin: 10px auto 0 auto;
+    border-radius: 2px;
+}
+
+/* =========================================
+   2. NAVBAR Y HERO
+   ========================================= */
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #e7e006 0%, #acd40b 100%);
+    min-height: 60vh;
+    padding: 100px 0;
+}
+
+/* =========================================
+   3. TARJETAS DE SERVICIOS Y PRODUCTOS
+   ========================================= */
+.card {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* Imagen de tarjetas de servicios */
+.servicio-img {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+    /* 🖼️ Si no hay imagen real, se muestra fondo gris */
+    background-color: #e9ecef;
+}
+
+/* Catálogo de productos */
+.product-card img {
+    background-color: #fff;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.05);
+}
+
+/* =========================================
+   4. BOTONES Y COLORES DE MARCA
+   ========================================= */
+.btn-warning {
+    background-color: #ffc107;
+    border: none;
+    color: #212529;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    color: #000;
+}
+
+/* =========================================
+   5. SECCIÓN DE UBICACIÓN (MAPA)
+   ========================================= */
+.ratio-16x9 iframe {
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+#ubicacion ul li {
+    font-size: 1.05rem;
+    color: #555;
+    padding-left: 10px;
+    border-left: 3px solid #ffc107;
+    margin-bottom: 20px;
+}
+
+/* =========================================
+   6. FORMULARIO DE CONTACTO
+   ========================================= */
+#contacto-form .card {
+    border-radius: 15px;
+}
+
+.form-floating > .form-control:focus,
+.form-floating > .form-select:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+}
+
+.form-floating > label {
+    color: #6c757d;
+}
+
+/* =========================================
+   7. CARRITO (OFFCANVAS)
+   ========================================= */
+.offcanvas-header {
+    background-color: #343a40;
+    color: white;
+}
+
+.offcanvas-header .btn-close {
+    filter: invert(1);
+}
+
+#cart-items img {
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+}
+
+#cart-total {
+    font-size: 1.25rem;
+    color: #212529;
+    font-weight: 800;
+}
+
+/* =========================================
+   8. FOOTER
+   ========================================= */
+footer {
+    border-top: 5px solid #ffc107;
+}
+
+/* =========================================
+   9. FILTROS DEL CATÁLOGO
+   ========================================= */
+.filtro-btn {
+    transition: all 0.2s ease;
+    border-radius: 20px !important;
+}
+
+/* =========================================
+   10. SPINNER DE CARGA
+   ========================================= */
+.spinner-border.text-warning {
+    width: 3rem;
+    height: 3rem;
+}

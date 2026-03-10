@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConstruRenta - Iniciar Sesión</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body { background: linear-gradient(135deg, #2c2c2c 0%, #434153 100%); min-height: 100vh; display: flex; align-items: center; }
+        .auth-card { border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+        .auth-tabs .nav-link { color: #666; font-weight: 600; border-radius: 0; }
+        .auth-tabs .nav-link.active { color: #212529; border-bottom: 3px solid #ffc107; background: transparent; }
+        .form-control:focus { border-color: #ffc107; box-shadow: 0 0 0 0.2rem rgba(255,193,7,0.25); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+
+                <!-- Logo -->
+                <div class="text-center mb-4">
+                    <a href="/" class="text-warning fw-bold fs-3 text-decoration-none">🏗️ ConstruRenta</a>
+                </div>
+
+                <div class="card auth-card">
+                    <!-- Tabs -->
+                    <ul class="nav nav-tabs auth-tabs" id="authTabs">
+                        <li class="nav-item w-50 text-center">
+                            <button class="nav-link active w-100 py-3" id="tab-login" onclick="showTab('login')">Iniciar sesión</button>
+                        </li>
+                        <li class="nav-item w-50 text-center">
+                            <button class="nav-link w-100 py-3" id="tab-registro" onclick="showTab('registro')">Registrarme</button>
+                        </li>
+                    </ul>
+
+                    <div class="card-body p-4">
+                        <div id="auth-alert"></div>
+
+                        <!-- ── FORMULARIO LOGIN ── -->
+                        <div id="form-login">
+                            <h5 class="fw-bold mb-4 text-center">Bienvenido de regreso</h5>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Correo electrónico</label>
+                                <input type="email" class="form-control" id="login-email" placeholder="correo@ejemplo.com">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Contraseña</label>
+                                <input type="password" class="form-control" id="login-password" placeholder="Tu contraseña">
+                            </div>
+                            <div class="d-grid mt-4">
+                                <button class="btn btn-warning fw-bold btn-lg" onclick="iniciarSesion()">
+                                    Entrar →
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- ── FORMULARIO REGISTRO ── -->
+                        <div id="form-registro" style="display:none;">
+                            <h5 class="fw-bold mb-4 text-center">Crear cuenta nueva</h5>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Nombre completo</label>
+                                <input type="text" class="form-control" id="reg-nombre" placeholder="Tu nombre">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Correo electrónico</label>
+                                <input type="email" class="form-control" id="reg-email" placeholder="correo@ejemplo.com">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Teléfono / WhatsApp</label>
+                                <input type="tel" class="form-control" id="reg-telefono" placeholder="722...">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Contraseña</label>
+                                <input type="password" class="form-control" id="reg-password" placeholder="Mínimo 6 caracteres">
+                            </div>
+                            <div class="d-grid mt-4">
+                                <button class="btn btn-warning fw-bold btn-lg" onclick="registrarse()">
+                                    Crear cuenta →
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="text-center mt-3">
+                    <a href="/" class="text-white-50 text-decoration-none small">← Volver al inicio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ── Cambiar entre Login y Registro ──
+        function showTab(tab) {
+            document.getElementById('form-login').style.display    = tab === 'login'   ? 'block' : 'none';
+            document.getElementById('form-registro').style.display = tab === 'registro'? 'block' : 'none';
+            document.getElementById('tab-login').classList.toggle('active',   tab === 'login');
+            document.getElementById('tab-registro').classList.toggle('active', tab === 'registro');
+            document.getElementById('auth-alert').innerHTML = '';
+        }
+
+        function mostrarAlerta(mensaje, tipo = 'danger') {
+            document.getElementById('auth-alert').innerHTML =
+                `<div class="alert alert-${tipo} py-2">${mensaje}</div>`;
+        }
+
+        // ── Iniciar sesión ──
+        async function iniciarSesion() {
+            const email    = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) return mostrarAlerta('Por favor llena todos los campos.');
+
+            try {
+                const res  = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+
+                if (!res.ok) return mostrarAlerta(data.error);
+
+                // Guardar token en localStorage
+                localStorage.setItem('cr_token',   data.token);
+                localStorage.setItem('cr_usuario',  JSON.stringify(data.usuario));
+
+                mostrarAlerta(`✅ ${data.mensaje}`, 'success');
+
+                // Redirigir según rol
+                setTimeout(() => {
+                    window.location.href = data.usuario.rol === 'admin' ? '/admin' : '/';
+                }, 1000);
+
+            } catch (err) {
+                mostrarAlerta('Error de conexión con el servidor.');
+            }
+        }
+
+        // ── Registrarse ──
+        async function registrarse() {
+            const nombre   = document.getElementById('reg-nombre').value.trim();
+            const email    = document.getElementById('reg-email').value.trim();
+            const telefono = document.getElementById('reg-telefono').value.trim();
+            const password = document.getElementById('reg-password').value;
+
+            if (!nombre || !email || !password) return mostrarAlerta('Nombre, correo y contraseña son obligatorios.');
+
+            try {
+                const res  = await fetch('/api/auth/registro', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre, email, telefono, password })
+                });
+                const data = await res.json();
+
+                if (!res.ok) return mostrarAlerta(data.error);
+
+                mostrarAlerta(data.mensaje, 'success');
+                setTimeout(() => showTab('login'), 1500);
+
+            } catch (err) {
+                mostrarAlerta('Error de conexión con el servidor.');
+            }
+        }
+
+        // Si ya hay sesión, redirigir
+        const token = localStorage.getItem('cr_token');
+        if (token) window.location.href = '/';
+    </script>
+</body>
+</html>
