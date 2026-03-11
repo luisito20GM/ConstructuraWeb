@@ -171,7 +171,15 @@
 
         // Si ya hay sesión, redirigir
         const token = localStorage.getItem('cr_token');
-        if (token) window.location.href = '/';
+        if (token){
+            const redirigir = localStorage.getItem('cr_redirigir');
+            if (redirigir) {
+                localStorage.removeItem('cr_redirigir');
+                window.location.href = redirigir;
+            } else {
+                window.location.href = '/';
+            }
+        }
     </script>
 </body>
 </html>

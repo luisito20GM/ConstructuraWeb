@@ -25,7 +25,7 @@ app.use('/api/auth',       require('./routes/auth'));
 app.use('/api/productos',  require('./routes/productos'));
 app.use('/api/cotizacion', require('./routes/cotizacion'));
 app.use('/api/admin',      require('./routes/admin'));
-
+app.use('/api/pagos',      require('./routes/pagos'));
 // ─────────────────────────────────────────
 // Rutas de páginas HTML
 // ─────────────────────────────────────────

@@ -74,3 +74,22 @@ INSERT INTO productos (nombre, descripcion, precio, tipo, categoria, img) VALUES
 ('Cemento Gris (bulto)',     'Cemento Portland tipo I, bolsa de 50kg.',                             180.00, 'venta',  'Materiales',   'cemento.jpg'),
 ('Varilla #4 (pieza)',       'Varilla corrugada #4 de 6 metros, alta resistencia.',                  85.00, 'venta',  'Materiales',   'varilla.jpg'),
 ('Compactadora de Suelo',    'Compactadora tipo Canguro, motor a gasolina, 65kg de golpe.',          600.00, 'renta',  'Maquinaria',   'compactadora.jpg');
+
+-- ─────────────────────────────────────────
+-- TABLA: Pagos registrados
+-- Se llena automáticamente cuando MercadoPago
+-- confirma un pago o el admin aprueba un SPEI
+-- ─────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS pagos (
+    id               INT AUTO_INCREMENT PRIMARY KEY,
+    cotizacion_id    INT,
+    nombre_cliente   VARCHAR(100) NOT NULL,
+    email_cliente    VARCHAR(150),
+    metodo           ENUM('tarjeta','oxxo','paypal','spei') NOT NULL,
+    total            DECIMAL(10,2) NOT NULL,
+    estatus          ENUM('pendiente','aprobado','rechazado') DEFAULT 'pendiente',
+    mp_payment_id    VARCHAR(100),
+    mp_preference_id VARCHAR(100),
+    creado_en        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cotizacion_id) REFERENCES cotizaciones(id) ON DELETE SET NULL
+);

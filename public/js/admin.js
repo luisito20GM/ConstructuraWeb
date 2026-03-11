@@ -36,7 +36,7 @@ async function apiFetch(url, options = {}) {
 // Navegación entre secciones
 // ─────────────────────────────────────────
 function mostrarSeccion(seccion) {
-    ['dashboard','cotizaciones','productos','usuarios'].forEach(s => {
+    ['dashboard','cotizaciones','productos','usuarios','pagos'].forEach(s => {
         document.getElementById(`seccion-${s}`).style.display = s === seccion ? 'block' : 'none';
     });
 
@@ -51,6 +51,7 @@ function mostrarSeccion(seccion) {
     if (seccion === 'cotizaciones') cargarCotizaciones();
     if (seccion === 'productos')    cargarProductos();
     if (seccion === 'usuarios')     cargarUsuarios();
+    if (seccion === 'pagos')        cargarPagos();
 }
 
 // ─────────────────────────────────────────
@@ -223,7 +224,38 @@ function cerrarSesion() {
     localStorage.removeItem('cr_usuario');
     window.location.href = '/login';
 }
+// ─────────────────────────────────────────
+// PAGOS
+// ─────────────────────────────────────────
+async function cargarPagos() {
+    const data  = await apiFetch('/api/pagos');
+    const tbody = document.getElementById('tabla-pagos');
 
+    if (!data.length) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">No hay pagos registrados aún.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = data.map(p => {
+        const fecha = new Date(p.creado_en).toLocaleDateString('es-MX');
+        const badge = p.estatus === 'aprobado'  ? 'bg-success' :
+                      p.estatus === 'pendiente' ? 'bg-warning text-dark' :
+                      p.estatus === 'rechazado' ? 'bg-danger' : 'bg-secondary';
+        const icono = p.metodo === 'tarjeta' ? '💳' :
+                      p.metodo === 'oxxo'    ? '🏪' :
+                      p.metodo === 'paypal'  ? '🅿️' :
+                      p.metodo === 'spei'    ? '🏦' : '💰';
+        return `
+            <tr>
+                <td>${p.id}</td>
+                <td class="fw-semibold">${p.nombre_cliente}</td>
+                <td>${icono} ${p.metodo}</td>
+                <td class="text-warning fw-bold">$${parseFloat(p.total).toFixed(2)}</td>
+                <td><span class="badge ${badge}">${p.estatus}</span></td>
+                <td>${fecha}</td>
+            </tr>`;
+    }).join('');
+}
 // ─────────────────────────────────────────
 // Cargar dashboard al inicio
 // ─────────────────────────────────────────

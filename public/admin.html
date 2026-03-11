@@ -34,6 +34,7 @@
             <a class="nav-link" href="#" onclick="mostrarSeccion('cotizaciones')">📋 Cotizaciones</a>
             <a class="nav-link" href="#" onclick="mostrarSeccion('productos')">📦 Productos</a>
             <a class="nav-link" href="#" onclick="mostrarSeccion('usuarios')">👥 Usuarios</a>
+            <a class="nav-link" href="#" onclick="mostrarSeccion('pagos')">💳 Pagos</a>
             <hr class="border-secondary mx-2">
             <a class="nav-link" href="/" target="_blank">🌐 Ver sitio web</a>
             <a class="nav-link text-danger" href="#" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
@@ -95,7 +96,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th><th>Nombre</th><th>Teléfono</th><th>Servicio</th>
-                                    <th>Total</th><th>Fecha</th><th>Estatus</th><th>Acción</th>
+                                    <th>Total</th><th>Pago</th><th>Fecha</th><th>Estatus</th><th>Acción</th>
                                 </tr>
                             </thead>
                             <tbody id="tabla-cotizaciones">
@@ -129,6 +130,35 @@
             </div>
         </div>
 
+        <!-- ────── PAGOS ────── -->
+<div id="seccion-pagos" style="display:none;">
+    <div class="card">
+        <div class="card-body">
+            <h6 class="fw-bold mb-3">💳 Historial de pagos</h6>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Cliente</th>
+                            <th>Método</th>
+                            <th>Total</th>
+                            <th>Estatus</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-pagos">
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">
+                                Cargando pagos...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
         <!-- ────── USUARIOS ────── -->
         <div id="seccion-usuarios" style="display:none;">
             <div class="card">

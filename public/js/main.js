@@ -314,7 +314,7 @@ function updateCartUI() {
 // ─────────────────────────────────────────
 function checkout() {
     if (Object.keys(cart).length === 0) return alert('El carrito está vacío.');
-
+    mostrarMetodosPago();
     // Llenar automáticamente el formulario de cotización si está en la misma página
     const seccionForm = document.getElementById('contacto-form');
     if (seccionForm) {
@@ -436,6 +436,49 @@ function actualizarNavAuth() {
 }
 
 function cerrarSesion() {
+
+    // ─────────────────────────────────────────
+// MÉTODOS DE PAGO
+// ─────────────────────────────────────────
+function pagarCon(metodo) {
+    // Ocultar todos los paneles primero
+    ['datos-spei','datos-spei-form','aviso-mp','aviso-mp-form'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+
+    if (metodo === 'spei') {
+        // SPEI — muestra datos bancarios solo al seleccionar
+        const spei1 = document.getElementById('datos-spei');
+        const spei2 = document.getElementById('datos-spei-form');
+        if (spei1) spei1.style.display = 'block';
+        if (spei2) spei2.style.display = 'block';
+
+    } else {
+        // Tarjeta, OXXO, PayPal — muestra aviso de MercadoPago
+        // Cuando el servidor esté activo aquí se abre el checkout real
+        const mp1 = document.getElementById('aviso-mp');
+        const mp2 = document.getElementById('aviso-mp-form');
+        if (mp1) mp1.style.display = 'block';
+        if (mp2) mp2.style.display = 'block';
+
+        // TODO: cuando tengas las claves de MercadoPago
+        // descomenta estas líneas:
+        // const mp = new MercadoPago('TU_PUBLIC_KEY_TEST');
+        // mp.checkout({ preference: { id: 'ID_GENERADO_POR_EL_SERVIDOR' } });
+    }
+}
+
+// Mostrar métodos de pago al finalizar pedido
+function mostrarMetodosPago() {
+    const mp = document.getElementById('metodos-pago');
+    const mpForm = document.getElementById('metodos-pago-form');
+    if (mp) mp.style.display = 'block';
+    if (mpForm) mpForm.style.display = 'block';
+}
+
+
+
     localStorage.removeItem('cr_token');
     localStorage.removeItem('cr_usuario');
     window.location.href = '/';
@@ -447,10 +490,12 @@ function cerrarSesion() {
 document.addEventListener('DOMContentLoaded', () => {
     loadCart();
     updateCartUI();
-    configurarFormulario();
+    configurarFormulario(alertEl.innerHTML = `<div class="alert alert-success py-2">${data.mensaje}</div>`);
+    mostrarMetodosPago();
     configurarFiltros();
     actualizarNavAuth();
-
+    mostrarMetodosPago();
+    
     // ─────────────────────────────────────────
     // Cargar productos desde la API de Node.js.
     // Si no hay servidor (archivo abierto directo

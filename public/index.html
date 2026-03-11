@@ -171,7 +171,40 @@
             <div class="mt-3 border-top pt-3">
                 <p class="fw-bold fs-5">Total: <span id="cart-total" class="text-warning">$0</span></p>
                 <div class="d-grid gap-2">
-                    <button id="checkoutBtn" class="btn btn-success fw-bold">✅ Finalizar pedido</button>
+                    <button id="checkoutBtn" class="btn btn-success fw-bold w-100">✅ Finalizar pedido</button>
+
+<!-- ── MÉTODOS DE PAGO ── -->
+<div id="metodos-pago" style="display:none;" class="mt-3">
+    <p class="fw-bold small mb-2 text-center">Selecciona cómo pagar:</p>
+    <div class="d-grid gap-2">
+        <button class="btn btn-primary fw-bold" onclick="pagarCon('tarjeta')">
+            💳 Tarjeta crédito / débito
+        </button>
+        <button class="btn btn-warning fw-bold text-dark" onclick="pagarCon('oxxo')">
+            🏪 Pagar en OXXO
+        </button>
+        <button class="btn btn-info fw-bold text-dark" onclick="pagarCon('paypal')">
+            🅿️ PayPal
+        </button>
+        <button class="btn btn-outline-secondary fw-bold" onclick="pagarCon('spei')">
+            🏦 Transferencia SPEI
+        </button>
+    </div>
+
+    <!-- Datos SPEI — solo visibles al seleccionar esa opción -->
+    <div id="datos-spei" style="display:none;" class="mt-3 p-3 bg-light rounded border">
+        <p class="fw-bold mb-1">🔒 Datos para transferencia:</p>
+        <p class="small mb-1"><strong>Banco:</strong> {{BANCO}}</p>
+        <p class="small mb-1"><strong>Titular:</strong> {{NOMBRE_TITULAR}}</p>
+        <p class="small mb-1"><strong>CLABE:</strong> <span class="text-danger fw-bold">{{CLABE}}</span></p>
+        <p class="small mb-0 text-muted">Envía tu comprobante por WhatsApp al {{TELEFONO}} para confirmar tu pedido.</p>
+    </div>
+
+    <!-- Aviso MercadoPago -->
+    <div id="aviso-mp" style="display:none;" class="mt-3 alert alert-info py-2 small text-center">
+        ⏳ Aquí se abrirá la pasarela de MercadoPago cuando el servidor esté activo.
+    </div>
+</div>
                     <button id="clearCartBtn" class="btn btn-outline-secondary">🗑️ Vaciar carrito</button>
                 </div>
             </div>
@@ -193,7 +226,7 @@
                             haz clic en "Compartir > Insertar mapa" y pega el src aquí
                         -->
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3762.661123456789!2d-99.123456789!3d19.123456789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDA3JzM0LjUiTiA5OcKwMDcnMzQuNSJX!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx"
+                            src="https://maps.app.goo.gl/xtRB2QEPiGfUjpZ29"
                             style="border:0;"
                             allowfullscreen=""
                             loading="lazy"
@@ -207,7 +240,7 @@
                     <ul class="list-unstyled">
                         <li class="mb-3">
                             <strong>📍 Dirección:</strong><br>
-                            {{DIRECCION}}
+                            México 608, Delegación Santa Cruz Atzcapotzaltongo, 50030 San Cristóbal Huichochitlán, Méx.
                         </li>
                         <li class="mb-3">
                             <strong>⏰ Horarios:</strong><br>
@@ -216,7 +249,7 @@
                         </li>
                         <li>
                             <strong>📞 Teléfono:</strong><br>
-                            {{TELEFONO}}
+                            7225107843 
                         </li>
                     </ul>
                 </div>
@@ -274,6 +307,46 @@
                                         <button id="submitQuote" type="button" class="btn btn-warning btn-lg px-5 fw-bold shadow-sm">
                                             Enviar Solicitud 📩
                                         </button>
+
+                                        <!-- ── MÉTODOS DE PAGO FORMULARIO ── -->
+                                         
+<div id="metodos-pago-form" style="display:none;" class="col-12 mt-3">
+    <hr>
+    <p class="fw-bold text-center mb-3">¿Quieres pagar tu anticipo ahora?</p>
+    <div class="row g-2">
+        <div class="col-6">
+            <button class="btn btn-primary fw-bold w-100" onclick="pagarCon('tarjeta')">
+                💳 Tarjeta
+            </button>
+        </div>
+        <div class="col-6">
+            <button class="btn btn-warning fw-bold w-100 text-dark" onclick="pagarCon('oxxo')">
+                🏪 OXXO
+            </button>
+        </div>
+        <div class="col-6">
+            <button class="btn btn-info fw-bold w-100 text-dark" onclick="pagarCon('paypal')">
+                🅿️ PayPal
+            </button>
+        </div>
+        <div class="col-6">
+            <button class="btn btn-outline-secondary fw-bold w-100" onclick="pagarCon('spei')">
+                🏦 SPEI
+            </button>
+        </div>
+    </div>
+    <!-- Datos SPEI formulario -->
+    <div id="datos-spei-form" style="display:none;" class="mt-3 p-3 bg-light rounded border">
+        <p class="fw-bold mb-1">🔒 Datos para transferencia:</p>
+        <p class="small mb-1"><strong>Banco:</strong> {{BANCO}}</p>
+        <p class="small mb-1"><strong>Titular:</strong> {{NOMBRE_TITULAR}}</p>
+        <p class="small mb-1"><strong>CLABE:</strong> <span class="text-danger fw-bold">{{CLABE}}</span></p>
+        <p class="small mb-0 text-muted">Envía tu comprobante al {{TELEFONO}} para confirmar.</p>
+    </div>
+    <div id="aviso-mp-form" style="display:none;" class="mt-3 alert alert-info py-2 small text-center">
+        ⏳ Aquí se abrirá MercadoPago cuando el servidor esté activo.
+    </div>
+</div>
                                     </div>
                                 </div>
                             </div>
@@ -289,7 +362,7 @@
     ═══════════════════════════════════════ -->
     <footer id="contacto" class="bg-dark text-white text-center py-4">
         <div class="container">
-            <p>Contáctanos: ing.luise.garciam@gmail.com <a href="mailto:{{CORREO}}" class="text-warning">{{CORREO}}</a> | Teléfono: 7225107843{{TELEFONO}}</p>
+            <p>Contáctanos: ing.luise.garciam@gmail.com <a href="mailto:ing.luise.garciam@gmail.com" class="text-warning"></a> | Teléfono: 7225107843</p>
             <p>Realizado por Luis Eduardo García Muñoz</p>
             <small>&copy; 2026 ConstruRenta. Todos los derechos reservados.</small>
         </div>
